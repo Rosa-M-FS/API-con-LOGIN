@@ -7,7 +7,6 @@ const {generateToken,verifyToken}=require('../middleware/middleware');
 router.get('/',(req,res)=>{
     const loginFormSession = `  
     <a href="/search">search</a>
-    <p> <p>
      <form action="/logout" method="post"> 
         <button type="submit">Cerrar sesión</button> 
       </form>
@@ -41,7 +40,6 @@ router.post('/login', (req, res) => {
         const token = generateToken(user);
         req.session.token = token;
         res.redirect('/search');
-        return res.json({message:'estas logado',token})
     } else {
         res.status(401).json({ mensaje: 'Credenciales incorrectas' }); 
     }
@@ -53,14 +51,16 @@ router.get('/search', verifyToken, (req, res) => {
     if (user) {
         res.send(`
         <h1>Busca tú personaje favorito</h1>
-        <a href="/">home</a><a href="/character">Todos los personajes</a><br>
+        <a href="/">home</a>
+        
+        <a href="/allcharacters">Todos los personajes</a><br>
+
+        <form action="/character" method="get">
         <label for="name">Personaje:</label>
-        <input type="text" id="name" name="name" placeholder="Rick" required>
-
-        <form action="/character:name" method="get">
+        <input type="text" id="name" name="name" placeholder="Rick" required>      
         <button type="submit">Enviar</button>
-
         </form>
+
         <form action="/logout" method="post">
             <button type="submit">Cerrar sesión</button>
         </form>
@@ -84,7 +84,7 @@ router.get('/characters/:name',verifyToken, async (req,res)=>{
     }
 })
 
-router.get('/characters',verifyToken, async (req,res)=>{
+router.get('/allcharacters',verifyToken, async (req,res)=>{
     const url=`https://rickandmortyapi.com/api/character`
     try {
         const response = await axios.get(url)

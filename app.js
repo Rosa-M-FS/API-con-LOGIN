@@ -20,7 +20,7 @@ app.use('/', usersRoutes);
 
 
 
-const PORT=4000;
+const PORT=3000;
 app.listen(PORT,()=>{
     console.log(`Express escuchando en http://localhost:${PORT}`)
 });
